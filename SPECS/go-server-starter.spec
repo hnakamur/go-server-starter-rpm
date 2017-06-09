@@ -12,7 +12,19 @@ Group:		System Environment/Daemons
 License:	MIT
 URL:		https://github.com/lestrrat/go-server-starter
 
-Source0:	https://github.com/lestrrat/go-server-starter/archive/%{commit}.tar.gz#/go-server-starter-%{commit}.tar.gz
+# Source0 tarball file %{name}.tar.gz was created with the following commands.
+#
+# mkdir -p go-server-starter/go/src/github.com/lestrrat
+# cd go-server-starter/go
+# export GOPATH=$PWD
+# cd src/github.com/lestrrat
+# git clone https://github.com/lestrrat/go-server-starter
+# cd go-server-starter
+# git checkout f9cb0b066498d26a90fd918fe265adbb0ea02bcf
+# go get -d ./...
+# cd $GOPATH/../..
+# tar cf - go-server-starter | gzip -9 > go-server-starter.tar.gz
+Source0:	%{name}.tar.gz
 
 BuildRoot:      %{name}
 BuildRequires:  golang >= 1.8
@@ -42,13 +54,11 @@ you want your Go program to support it, you can look under the listener
 directory for an implementation that also fills the net.Listener interface.
 
 %prep
-%setup -c -n %{name}/go/src/github.com/lestrrat
-cd %{_builddir}/%{name}/go/src/github.com/lestrrat
-%{__mv} go-server-starter-%{commit} go-server-starter
+%setup -n %{name}
 
 %build
 export GOPATH=%{_builddir}/%{name}/go
-cd "$GOPATH/src/github.com/lestrrat/go-server-starter"
+cd %{_builddir}/%{name}/go/src/github.com/lestrrat/%{name}
 go install ./...
 
 %install
